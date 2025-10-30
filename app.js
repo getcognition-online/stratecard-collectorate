@@ -1,0 +1,1 @@
+// Content from core_architecture.js

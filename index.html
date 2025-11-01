@@ -5,10 +5,270 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stratecard Collectorate - Imperial Tactical Command</title>
     <link rel="stylesheet" href="style.css">
+    <meta name="description" content="Stratecard Collectorate - A sophisticated tactical CCG featuring imperial warfare and strategic dominance">
+    <meta name="theme-color" content="#21808d">
 </head>
 <body>
-    <div id="loading-screen">Loading...</div>
-    <div id="game-container" style="display:none;">Game Loaded</div>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen" style="
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        display: flex; align-items: center; justify-content: center;
+        z-index: 10000; color: #eee; font-family: monospace;
+    ">
+        <div class="loading-content" style="text-align: center;">
+            <div class="imperial-seal" style="font-size: 4rem; margin-bottom: 1rem;">⚔️</div>
+            <h1 style="font-size: 2rem; margin-bottom: 0.5rem; color: #4a90e2;">Stratecard Collectorate</h1>
+            <p style="margin-bottom: 2rem; color: #888;">Initializing Imperial Command Systems...</p>
+            <div class="loading-bar" style="
+                width: 200px; height: 4px; background: #333; 
+                border-radius: 2px; overflow: hidden;
+            ">
+                <div class="loading-progress" style="
+                    width: 0%; height: 100%; background: #4a90e2;
+                    animation: loadingProgress 1.5s ease-out forwards;
+                "></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="game-container" class="game-container" style="display: none;">
+        <!-- Imperial Header -->
+        <header style="
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem; background: var(--color-surface);
+            border-bottom: 2px solid var(--color-border);
+        ">
+            <div class="header-left">
+                <h1 style="font-size: 1.5rem; color: var(--color-primary); margin: 0;">⚔️ Stratecard Collectorate</h1>
+                <p style="margin: 0; color: var(--color-text-secondary); font-size: 0.9rem;">Dominion Through Strategic Supremacy</p>
+            </div>
+            
+            <div style="display: flex; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span>💎</span>
+                    <span id="credits-amount" style="font-weight: bold;">1000</span>
+                    <span style="font-size: 0.8rem;">Credits</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span>🔮</span>
+                    <span id="gems-amount" style="font-weight: bold;">20</span>
+                    <span style="font-size: 0.8rem;">Crystals</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span>⚡</span>
+                    <span id="energy-amount" style="font-weight: bold;">10</span>
+                    <span style="font-size: 0.8rem;">Energy</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav style="
+            display: flex; background: var(--color-surface);
+            border-bottom: 2px solid var(--color-border);
+            overflow-x: auto;
+        ">
+            <button class="nav-command active" data-screen="collection" style="
+                padding: 1rem; border: none; background: var(--color-primary);
+                color: white; cursor: pointer; flex: 1; font-size: 0.9rem;
+            ">🏛️ Arsenal</button>
+            <button class="nav-command" data-screen="battle" style="
+                padding: 1rem; border: none; background: var(--color-surface);
+                color: var(--color-text); cursor: pointer; flex: 1; font-size: 0.9rem;
+            ">⚔️ Battlefield</button>
+            <button class="nav-command" data-screen="deckBuilder" style="
+                padding: 1rem; border: none; background: var(--color-surface);
+                color: var(--color-text); cursor: pointer; flex: 1; font-size: 0.9rem;
+            ">📋 Deck</button>
+            <button class="nav-command" data-screen="gacha" style="
+                padding: 1rem; border: none; background: var(--color-surface);
+                color: var(--color-text); cursor: pointer; flex: 1; font-size: 0.9rem;
+            ">📦 Packs</button>
+        </nav>
+
+        <!-- Collection Screen -->
+        <div id="collection" class="screen active">
+            <div class="screen-header">
+                <h2>Imperial Arsenal</h2>
+            </div>
+            
+            <div class="collection-content">
+                <div class="collection-stats">
+                    <div>Total: <span id="total-units">18</span></div>
+                    <div>Unique: <span id="unique-units">6</span></div>
+                    <div>Elite: <span id="elite-units">0</span></div>
+                </div>
+                
+                <div class="collection-filters">
+                    <select id="rarity-filter" class="form-control">
+                        <option value="">All Rarities</option>
+                        <option value="Common">Common</option>
+                        <option value="Uncommon">Uncommon</option>
+                        <option value="Rare">Rare</option>
+                        <option value="Elite">Elite</option>
+                        <option value="Legendary">Legendary</option>
+                        <option value="Ultimate">Ultimate</option>
+                    </select>
+                </div>
+                
+                <div id="units-collection" class="card-grid">
+                    <!-- Cards populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Battle Screen -->
+        <div id="battle" class="screen">
+            <div class="battle-header">
+                <div class="energy-display">
+                    Energy: <span id="battle-energy" class="energy-value">10</span>
+                </div>
+                <div class="turn-display">
+                    Turn: <span id="turn-counter">1</span>
+                </div>
+            </div>
+            
+            <div class="battlefield-container">
+                <div id="battlefield" class="battlefield">
+                    <!-- 9x9 grid populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="battle-controls">
+                <div class="hand-container" id="battle-hand">
+                    <!-- Hand cards populated by JavaScript -->
+                </div>
+                
+                <div class="battle-actions">
+                    <button id="end-turn-btn" class="btn btn--primary">End Turn</button>
+                    <button id="clear-field-btn" class="btn btn--secondary">Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deck Builder Screen -->
+        <div id="deckBuilder" class="screen">
+            <div class="screen-header">
+                <h2>Deck Constructor</h2>
+            </div>
+            
+            <div class="deck-builder-content">
+                <div class="current-deck">
+                    <h3>Current Deck <span id="deck-count" class="deck-count">(0/20)</span></h3>
+                    <div id="current-deck" class="deck-list">
+                        <!-- Deck cards populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="available-cards">
+                    <h3>Available Cards</h3>
+                    <div class="filter-controls">
+                        <select id="deck-rarity-filter" class="form-control">
+                            <option value="">All Rarities</option>
+                            <option value="Common">Common</option>
+                            <option value="Uncommon">Uncommon</option>
+                            <option value="Rare">Rare</option>
+                            <option value="Elite">Elite</option>
+                            <option value="Legendary">Legendary</option>
+                            <option value="Ultimate">Ultimate</option>
+                        </select>
+                    </div>
+                    <div id="available-cards" class="card-grid">
+                        <!-- Available cards populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gacha Screen -->
+        <div id="gacha" class="screen">
+            <div class="screen-header">
+                <h2>Pack Opening</h2>
+            </div>
+            
+            <div class="gacha-content">
+                <div class="gacha-info">
+                    <h3>Drop Rates</h3>
+                    <div class="rate-list">
+                        <div class="rate-item">
+                            <span>Common</span>
+                            <span>70%</span>
+                        </div>
+                        <div class="rate-item">
+                            <span>Uncommon</span>
+                            <span>20%</span>
+                        </div>
+                        <div class="rate-item">
+                            <span>Rare</span>
+                            <span>7.5%</span>
+                        </div>
+                        <div class="rate-item">
+                            <span>Elite</span>
+                            <span>2%</span>
+                        </div>
+                        <div class="rate-item">
+                            <span>Legendary</span>
+                            <span>0.48%</span>
+                        </div>
+                        <div class="rate-item">
+                            <span>Ultimate</span>
+                            <span>0.02%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="pity-info">
+                        <p>Pity Counter: <span id="pity-counter">0</span>/500</p>
+                        <p class="pity-note">Ultimate guaranteed at 500 packs</p>
+                    </div>
+                </div>
+                
+                <div class="gacha-actions">
+                    <div class="pack-option">
+                        <h3>Standard Pack</h3>
+                        <p>5 cards for 100 credits</p>
+                        <button id="buy-standard-btn" class="btn btn--primary btn--lg">Open Pack (100💎)</button>
+                    </div>
+                    
+                    <div class="pack-option">
+                        <h3>Premium Pack</h3>
+                        <p>10 cards for 900 credits</p>
+                        <button id="buy-premium-btn" class="btn btn--primary btn--lg">Open Premium (900💎)</button>
+                    </div>
+                </div>
+                
+                <div id="pack-results" class="pack-results hidden">
+                    <!-- Pack results populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Modal -->
+    <div id="card-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-card-name">Card Details</h3>
+                <button class="modal-close" id="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-card-details" class="card-details">
+                    <!-- Card details populated by JavaScript -->
+                </div>
+                <div id="modal-card-actions" class="card-actions">
+                    <!-- Card actions populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes loadingProgress { 0% { width: 0%; } 100% { width: 100%; } }
+        .nav-command.active { background: var(--color-primary) !important; color: white !important; }
+        .nav-command:hover:not(.active) { background: var(--color-secondary) !important; }
+    </style>
+
     <script src="app.js"></script>
 </body>
 </html>

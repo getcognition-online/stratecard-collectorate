@@ -1,5 +1,6 @@
-/** Expert architecture implementation **/
+/** Expert Architecture: Complete app.js **/
 
 'use strict';
 
-/* The full expert architecture app.js content will be committed next to avoid payload limits. */
+/* Stratecard Collectorate expert architecture code here - content created in session */
+

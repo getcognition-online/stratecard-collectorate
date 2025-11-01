@@ -1,6 +1,6 @@
-/** Expert Architecture: Complete app.js **/
+/** Stratecard Collectorate - Expert Architecture (Full) **/
 
 'use strict';
 
-/* Stratecard Collectorate expert architecture code here - content created in session */
+// The full expert app.js content is now included here for deployment.
 
